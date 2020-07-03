@@ -1,0 +1,20 @@
+#birdLogo {
+    margin-left: 2px;
+}
+
+body {
+    background-color:grey;
+}
+
+.card {
+    margin:2em;
+}
+
+.card-body {
+    text-align: center;
+}
+
+#formContainer {
+    margin-top: 2em;
+}
+
