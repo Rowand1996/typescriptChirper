@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 
 export interface Chirp {
-    user: string,
-    message: string
+    id?: number,
+    name: string,
+    content: string
 }
 
 
@@ -19,10 +20,10 @@ const CreateChirp = () => {
 
     let postForm = () => {
         let newChirp = {
-            user: user,
-            text: text
+            name: name,
+            content: content
         }
-        fetch('http://localhost:3000/api', {
+        fetch('http://localhost:3000/api/chirps', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newChirp)
@@ -31,8 +32,8 @@ const CreateChirp = () => {
         addButton.show();
     }
 
-    const [user, setuser] = useState<string>("");
-    const [text, setmessage] = useState<string>("");
+    const [name, setuser] = useState<string>("");
+    const [content, setmessage] = useState<string>("");
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setuser(e.target.value);
@@ -47,11 +48,11 @@ const CreateChirp = () => {
             <form>
                 <div className="form-group">
                     <label>Name:</label>
-                    <input onChange={handleNameChange} value={user} type="name" className="form-control" id="nameField" placeholder="Enter name" />
+                    <input onChange={handleNameChange} value={name} type="name" className="form-control" id="nameField" placeholder="Enter name" />
                 </div>
                 <div className="form-group">
                     <label>Chirp:</label>
-                    <input onChange={handleMessageChange} value={text} type="message" className="form-control" id="messageField" placeholder="Enter chirp here!" />
+                    <input onChange={handleMessageChange} value={content} type="message" className="form-control" id="messageField" placeholder="Enter chirp here!" />
                 </div>
                 <div className="d-flex justify-content-end">
                     <button type="button" onClick={postForm} id="btnSubmit" className="btn btn-primary formSubmit" >Submit</button>
