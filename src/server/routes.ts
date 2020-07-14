@@ -98,6 +98,7 @@ router.delete('/chirps/:id?', async (req, res) => {
 
     try {
         let id = parseInt(req.params.id);
+        
         await db.Chirps.deleteChirp(id);
         res.sendStatus(200);
     } catch (e) {
