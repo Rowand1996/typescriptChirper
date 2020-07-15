@@ -1,9 +1,10 @@
 import * as express from 'express';
-import db from './db';
+import db from '../db';
+import authRouter from './auth';
 const app = express();
 const router = express.Router();
 
-
+router.use('/auth', authRouter);
 
 router.get('/chirps/:id?', async (req, res) => {
 
@@ -22,27 +23,40 @@ router.get('/chirps/:id?', async (req, res) => {
     }
 });
 
+router.get('/mentions/:id', async (req, res) => {
+
+    try {
+        let id = parseInt(req.params.id);
+        console.log(id);
+        let dbResponse = await db.Chirps.showMentions(id);
+        res.send(dbResponse[0]);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 router.post('/chirps', async (req, res) => {
 
     try {
         let name = req.body.name;
         let content = req.body.content;
         let position = content.search("@");
-        if(position > 0){
-            let startOfName = content.substring(position +1,content.length);
+        if (position > 0) {
+            let startOfName = content.substring(position + 1, content.length);
             let secondPosition = startOfName.search(" ");
-            let mentionName = content.substring(position + 1,secondPosition + position + 1);
+            let mentionName = content.substring(position + 1, secondPosition + position + 1);
             await db.Chirps.oneUser(name).then((results) => {
-            let id = results[0].id;
-            if (results.length > 0) {
-                console.log(results);
-                db.Chirps.addChirp(id, content).then((result) => {
-                    console.log(result);
-                    let chirpId = result.insertId;
-                    console.log(chirpId);
+                let id = results[0].id;
+                if (results.length > 0) {
+                    console.log(results);
+                    db.Chirps.addChirp(id, content).then((result) => {
+                        console.log(result);
+                        let chirpId = result.insertId;
+                        console.log(chirpId);
                         db.Chirps.oneUser(mentionName).then((res) => {
                             let userId = res[0].id;
-                            db.Chirps.addMention(userId,chirpId);
+                            db.Chirps.addMention(userId, chirpId);
                         });
                     });
 
@@ -70,9 +84,9 @@ router.post('/chirps', async (req, res) => {
                 }
             });
         }
-        
-        
-        
+
+
+
 
     } catch (e) {
         console.log(e);
@@ -98,7 +112,7 @@ router.delete('/chirps/:id?', async (req, res) => {
 
     try {
         let id = parseInt(req.params.id);
-        
+
         await db.Chirps.deleteChirp(id);
         res.sendStatus(200);
     } catch (e) {

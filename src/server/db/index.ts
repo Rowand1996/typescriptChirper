@@ -2,15 +2,11 @@ import * as mysql from 'mysql';
 
 
 import Chirps from './chirps';
+import Users from './users';
+import Tokens from './tokens';
+import config from '../config';
 
-
-export const Connection = mysql.createConnection({
-    host: 'localhost',
-    port:3306,
-    user:'chirprapp',
-    password:"NewUserCode0807!",
-    database:"chirpr"
-});
+export const Connection = mysql.createPool(config.mysql);
 
 
 export const Query = (query:string, values?: Array<string | number>) => {
@@ -24,5 +20,7 @@ export const Query = (query:string, values?: Array<string | number>) => {
 
 
 export default {
-    Chirps
+    Chirps,
+    Users,
+    Tokens
 }
