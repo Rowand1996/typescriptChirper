@@ -5,6 +5,7 @@ const one = async (id: number) => Query("select chirps.id,users.name,chirps.cont
 const edit = async (id: number,content: string) => Query("update chirps set content = ? WHERE id = ? ",[content,id]);
 const oneUser = async (name: string) => Query("select users.id from users where users.name = ? ", [name]);
 const addUser = async (name:string) => Query(" insert into users (name) values(?)", [name]);
+const insertUser = async (name:string,password:any,role:string) => Query(" insert into users (name,password,role) values(?,?,?)", [name,password,role]);
 const addChirp = async (id:number,content:string) => Query(" insert into chirps (content,userid) values(?,?)",[content,id]);
 const deleteChirp = async (id:number) => Query(" delete from chirps where id = ? ",[id]);
 const addMention = async (userId:number,chirpId:number) => Query("insert into mentions (userid,chirpid) values(?,?)",[userId,chirpId]);
@@ -15,6 +16,7 @@ export default {
     edit,
     oneUser,
     addUser,
+    insertUser,
     addChirp,
     deleteChirp,
     addMention,

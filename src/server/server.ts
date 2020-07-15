@@ -10,12 +10,9 @@ import routes from './routes';
 const app = express();
 
 app.use(express.json());
-
 app.use(express.static('public'));
-app.use(express.json());
 app.use(passport.initialize());
-
-app.use('/api', routes);
+app.use(routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')));
 
